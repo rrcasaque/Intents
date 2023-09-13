@@ -3,18 +3,20 @@ package com.example.intents
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import com.example.intents.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var amb: ActivityMainBinding
 
-    //     Em kotlin, o companion object funciona como um singleton. Não é necessário definir tipos
-//     pois ele só será utilizado aqui.
+    private lateinit var parl: ActivityResultLauncher<Intent>
+
     companion object {
         const val PARAMETRO_EXTRA = "PARAMETRO_EXTRA"
-        const val PARAMETRO_REQUEST_CODE = 0 // este parâmetro tem que ser passado para a tela que
-        // irá abrir, e depois a tela que foi aberta devolverá à anterior, como um token.
-
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,28 +24,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(amb.root)
         supportActionBar?.subtitle = "MainActivity"
 
+        parl =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result?.resultCode == RESULT_OK) {
+                    result.data?.getStringExtra(PARAMETRO_EXTRA)?.let { parametro ->
+                        amb.parametroTv.text = parametro
+                    }
+                }
+            }
+
         amb.entrarParametroBt.setOnClickListener {
-            val parametroIntent = Intent(this, ParametroActivity::class.java)
-//              val parametrosBundle = Bundle()
-//              parametrosBundle.putString(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
-//
-//             Agora, vamos usar o Bundle que a Intent por padrão já possui:
+            val parametroIntent = Intent("PARAMETRO_ACTIVITY_ACTION")
             parametroIntent.putExtra(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
 
-            startActivityForResult(parametroIntent, PARAMETRO_REQUEST_CODE)
-        }
-    }
-
-    //    forma legado de realizar a ação:
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PARAMETRO_REQUEST_CODE && resultCode == RESULT_OK){
-//            val parametroRecebido = data?.getStringExtra(PARAMETRO_EXTRA)
-//            amb.parametroTv.text = parametroRecebido
-//            ou:
-            data?.getStringExtra(PARAMETRO_EXTRA)?.let { parametro ->
-                amb.parametroTv.text = parametro
-            }
+            parl.launch(parametroIntent)
         }
     }
 
