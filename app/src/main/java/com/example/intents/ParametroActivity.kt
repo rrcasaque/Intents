@@ -38,7 +38,7 @@ class ParametroActivity : AppCompatActivity() {
 //            criando a variável aqui e não fora do método, eu poupo no desempenho; só será criada quando o método for executado
 //            val parametroRetorno = apb.parametroEt.text.toString()
 //            intent.putExtra(MainActivity.PARAMETRO_EXTRA, parametroRetorno)
-            intent.putExtra(MainActivity.PARAMETRO_EXTRA, apb.parametroEt.text.toString())
+            intentRetorno.putExtra(MainActivity.PARAMETRO_EXTRA, apb.parametroEt.text.toString())
             setResult(RESULT_OK, intentRetorno)
             // chama onPause, onStop e onDestroy:
             finish()

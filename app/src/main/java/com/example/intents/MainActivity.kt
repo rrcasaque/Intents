@@ -8,8 +8,8 @@ import com.example.intents.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var amb: ActivityMainBinding
 
-    // Em kotlin, o companion object funciona como um singleton. Não é necessário definir tipos
-    // pois ele só será utilizado aqui.
+    //     Em kotlin, o companion object funciona como um singleton. Não é necessário definir tipos
+//     pois ele só será utilizado aqui.
     companion object {
         const val PARAMETRO_EXTRA = "PARAMETRO_EXTRA"
         const val PARAMETRO_REQUEST_CODE = 0 // este parâmetro tem que ser passado para a tela que
@@ -24,13 +24,26 @@ class MainActivity : AppCompatActivity() {
 
         amb.entrarParametroBt.setOnClickListener {
             val parametroIntent = Intent(this, ParametroActivity::class.java)
-            //  val parametrosBundle = Bundle()
-            //  parametrosBundle.putString(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
-
-            // Agora, vamos usar o Bundle que a Intent por padrão já possui:
+//              val parametrosBundle = Bundle()
+//              parametrosBundle.putString(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
+//
+//             Agora, vamos usar o Bundle que a Intent por padrão já possui:
             parametroIntent.putExtra(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
 
             startActivityForResult(parametroIntent, PARAMETRO_REQUEST_CODE)
+        }
+    }
+
+    //    forma legado de realizar a ação:
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PARAMETRO_REQUEST_CODE && resultCode == RESULT_OK){
+//            val parametroRecebido = data?.getStringExtra(PARAMETRO_EXTRA)
+//            amb.parametroTv.text = parametroRecebido
+//            ou:
+            data?.getStringExtra(PARAMETRO_EXTRA)?.let { parametro ->
+                amb.parametroTv.text = parametro
+            }
         }
     }
 
