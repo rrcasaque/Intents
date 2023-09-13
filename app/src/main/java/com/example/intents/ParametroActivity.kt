@@ -13,6 +13,5 @@ class ParametroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(apb.root)
         supportActionBar?.subtitle = "ParametroActivity"
-
     }
 }
