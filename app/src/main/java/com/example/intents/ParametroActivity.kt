@@ -13,5 +13,24 @@ class ParametroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(apb.root)
         supportActionBar?.subtitle = "ParametroActivity"
+
+        val parametroRecebido: String = intent.getStringExtra(MainActivity.PARAMETRO_EXTRA) ?: ""
+        apb.parametroEt.setText(parametroRecebido)
+
+        intent.getStringExtra(MainActivity.PARAMETRO_EXTRA)?.let { parametro ->
+            apb.parametroEt.setText(parametro)
+        }
+
+//        também pode ser escrito assim:
+//
+//        intent.getStringExtra(MainActivity.PARAMETRO_EXTRA)?.let {
+//            apb.parametroEt.setText(it)
+//        }
+//
+//        método apply:
+//        intent.getStringExtra(MainActivity.PARAMETRO_EXTRA)?.apply {
+//            apb.parametroEt.setText(this)
+//        }
+
     }
 }
